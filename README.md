@@ -1,44 +1,100 @@
-#### 项目整体文件说明
-- `config` 配置文件目录
-  - `default.json` 默认配置文件（其中包含数据库配置，jwt配置）
-- `dao` 数据访问层，存放对数据库的增删改查操作
-  - `DAO.js` 提供的公共访问数据库的方法
-- `models` 存放具体数据库 ORM 模型文件
-- `modules` 当前项目模块
-  - `authorization.js` API权限验证模块
-  - `database.js` 数据库模块（数据库加载基于 nodejs-orm2 库加载）
-  - `passport.js` 基于 passport 模块的登录搭建
-  - `resextra.js` API 统一返回结果接口
-- `node_modules` 项目依赖的第三方模块
-- `routes` 统一路由
-  - `api` 提供 api 接口
-  - `mapp` 提供移动APP界面
-  - `mweb` 提供移动web站点
-- `services` 服务层，业务逻辑代码在这一层编写，通过不同的接口获取的数据转换成统一的前端所需要的数据
-- `app.js` 主项目入口文件
-- `package.json` 项目配置文件
+### NideShop商城（服务端）
+
++ 界面高仿网易严选商城(主要是2016年wap版)
++ 测试数据采集自网易严选商城
++ 功能和数据库参考ecshop
++ 服务端api基于Ｎode.js+ThinkJS+MySQL
++ 计划添加基于Vue.js的后台管理系统、PC版、Ｗap版
+
+本项目需要配合微信小程序端使用，GitHub: [https://github.com/tumobi/nideshop-mini-program](https://github.com/tumobi/nideshop-mini-program)
+
+### 本地开发环境配置
++ 克隆项目到本地
+```
+git clone https://github.com/tumobi/nideshop
+```
++ 创建数据库nideshop并导入项目根目录下的nideshop.sql
+```
+CREATE SCHEMA `nideshop` DEFAULT CHARACTER SET utf8mb4 ;
+```
+> 注意数据库字符编码为utf8mb4 
++ 更改数据库配置
+  src/common/config/database.js
+  
+```
+const mysql = require('think-model-mysql');
+
+module.exports = {
+    handle: mysql,
+    database: 'nideshop',
+    prefix: 'nideshop_',
+    encoding: 'utf8mb4',
+    host: '127.0.0.1',
+    port: '3306',
+    user: 'root',
+    password: '你的密码',
+    dateStrings: true
+};
+```
+
++ 填写微信登录和微信支付配置
+src/common/config/config.js
+```
+// default config
+module.exports = {
+  default_module: 'api',
+  weixin: {
+    appid: '', // 小程序 appid
+    secret: '', // 小程序密钥
+    mch_id: '', // 商户帐号ID
+    partner_key: '', // 微信支付密钥
+    notify_url: '' // 微信异步通知，例：https://www.nideshop.com/api/pay/notify
+  }
+};
+```
+
++ 安装依赖并启动
+```
+npm install
+npm start
+```
+访问http://127.0.0.1:8360/
+
+### 线上部署
+[云服务器ECS-云主机优惠-2折上云](https://promotion.aliyun.com/ntms/act/qwbk.html?userCode=3grpysgf)
+
+[在阿里云（CentOS 7）上部署文档](https://www.nideshop.com/documents/nideshop-manual/deployment-centos)
 
 
+### 微信小程序客户端截图
 
-#### 项目环境
+![首页](http://upload-images.jianshu.io/upload_images/3985656-c543b937ac6e79bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
-##### 	本地环境
+![专题](http://upload-images.jianshu.io/upload_images/3985656-bd606aac3b5491c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
-​		Node.js + MySQL
+![分类](http://upload-images.jianshu.io/upload_images/3985656-fa9565158376d439.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
-##### 	创建数据库
+![商品列表](http://upload-images.jianshu.io/upload_images/3985656-788b7fd2c4a558d0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
-​		数据库文件在：db -> mysdb.sql
+![商品详情](http://upload-images.jianshu.io/upload_images/3985656-99a6e0a57778d85f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
-​    	创建数据库mydb，可通过新建查询执行mysdb.sql下的SQL语句建立数据库，数据库表
+![购物车](http://upload-images.jianshu.io/upload_images/3985656-60ff2307d81f6bb2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
-​		数据库连接名：root    密码： 123456
+![订单中心](http://upload-images.jianshu.io/upload_images/3985656-dff837e6b2ec87b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
-​				可在config -> default.json 修改
 
-##### 	启动项目
+### 功能列表
++ 首页
++ 分类首页、分类商品、新品首发、人气推荐商品页面
++ 商品详情页面，包含加入购物车、收藏商品、商品评论功能
++ 搜索功能
++ 专题功能
++ 品牌功能
++ 完整的购物流程，商品的加入、编辑、删除、批量选择，收货地址的选择，下单支付
++ 会员中心（订单、收藏、足迹、收货地址、意见反馈）
+....
 
-​		安装依赖： npm install
+### 交流
+喜欢别忘了 Star，有问题可通过微信、公众号、QQ 群联系我，谢谢您的关注。
 
-​		启动项目 ：node app.js
-
+![联系方式](http://nideshop-static.childsay.com/nideshop-qrcode.png)
